@@ -1,0 +1,10 @@
+raw_value,stage,stage_order
+pre-seed,Pre-seed,1
+seed,Seed,2
+pre-series a,Pre-Series A,3
+series a,Series A,4
+pre-series b,Pre-Series B,5
+series b,Series B,6
+series b2,Series B2,7
+series b2 round,Series B2,7
+undisclosed,Undisclosed,

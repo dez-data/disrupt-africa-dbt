@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    tables:
+      - name: deals
+        description: Raw Excel load, all columns as text, one row per source row in the 2025 Disrupt Africa report. This is the source table for the stg_deals model.

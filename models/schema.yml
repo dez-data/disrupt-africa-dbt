@@ -1,0 +1,75 @@
+version: 2
+
+models:
+  - name: stg_deals
+    description: One row per funded startup deal from the 2025 Disrupt Africa report, cleaned, mapped through seed files and deduplicated.
+    columns:
+      - name: deal_id
+        data_tests: [unique, not_null]
+      - name: country
+        data_tests: [not_null]
+      - name: sector
+        data_tests: [not_null]
+      - name: stage
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Pre-seed', 'Seed', 'Pre-Series A', 'Series A',
+                         'Pre-Series B', 'Series B', 'Series B2', 'Undisclosed']
+      - name: deal_month
+        data_tests: [not_null]
+      - name: funding_type
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Equity', 'Debt', 'Equity/debt']
+
+  - name: dim_country
+    description: One row per country, with UN geoschem region. 
+    columns:
+      - name: country_id
+        data_tests: [unique, not_null]
+      - name: country
+        data_tests: [unique]
+
+  - name: dim_sector
+    description: One row per cleaned sector label.
+    columns:
+      - name: sector_id
+        data_tests: [unique, not_null]
+      - name: sector
+        data_tests: [unique]
+
+  - name: dim_company
+    description: One row per startup per country. 
+    columns:
+      - name: company_id
+        data_tests: [unique, not_null]
+
+  - name: fct_deals
+    description: one row per startup deal. Holds keys and measures. Amount is null where the deal value was not disclosed.
+    columns:
+      - name: deal_id
+        data_tests: [unique, not_null]
+      - name: company_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_company')
+                field: company_id
+      - name: country_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_country')
+                field: country_id
+      - name: sector_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_sector')
+                field: sector_id
